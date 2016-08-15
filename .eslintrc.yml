@@ -20,3 +20,5 @@ rules:
     - never
   no-unused-vars:
     - off
+plugins:
+  - "html"

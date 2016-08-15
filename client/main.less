@@ -3,11 +3,22 @@
 body {
   text-transform: uppercase;
   font-family: 'Roboto Condensed', sans-serif;
+  background-color: #eee;
+  font-size: 13pt;
 }
 
 header {
   height: 100px;
   border-bottom: 2px #ddd solid;
+  background-color: #fff;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:focus {
+  text-decoration: none;
 }
 
 .header-container {
@@ -48,6 +59,9 @@ header {
   flex: 1 0 0;
   align-self: center;
   text-align: right;
+}
+
+#login-button {
   cursor: pointer;
 }
 
@@ -62,4 +76,57 @@ header {
 
 .faded {
   color: #aaa;
+}
+
+.content {
+  width: 900px;
+  background-color: white;
+  padding: 20px;
+  margin: 30px auto;
+  p {
+    text-transform: none;
+  }
+  border: #ddd solid 1px;
+}
+
+.content-header {
+  text-align: center;
+}
+
+.red {
+  color: red;
+}
+
+.box-row {
+  display: flex;
+  height: 350px;
+}
+
+.box {
+  flex: 1 0 0;
+  background-color: #eee;
+  border: 1px #ddd solid;
+  padding: 15px;
+  margin: 10px;
+}
+
+.content-footer {
+  text-align: center;
+}
+
+.links {
+  float: right;
+  a {
+    color: white;
+  }
+}
+
+footer {
+  background-color: red;
+  color: white;
+}
+
+.footer-container {
+  padding: 20px 100px;
+
 }
