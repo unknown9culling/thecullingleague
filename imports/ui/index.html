@@ -1,30 +1,34 @@
 <template name='index'>
-  <div class='content-header'>
-    <h1>High Ranked Competitive <span class='red'>Culling</span></h1>
-    <p>Register for tournaments and rise to the top of the Culling ranks!</p>
-  </div>
-  <div class='box-row'>
-    <div class='box'>
-      <h3>Ranked <span class='red'>Play</span></h3>
-      <p>Don't play anymore with players half your skill level in a game where you can win every time. Challenge yourself and play against players matched exactly to your level of play.</p>
+  {{#if currentUser}}
+    Logged in as {{currentUser.profile.id}}
+  {{else}}
+    <div class='content-header'>
+      <h1>High Ranked Competitive <span class='red'>Culling</span></h1>
+      <p>Register for tournaments and rise to the top of the Culling ranks!</p>
     </div>
-    <div class='box'>
-      <h3><span class='red'>Automatic</span> Game Setup</h3>
-      <p>Our site will automatically organize a tournament and give you a key to join the match instead of having to manually setup the private game every time.</p>
+    <div class='box-row'>
+      <div class='box'>
+        <h3>Ranked <span class='red'>Play</span></h3>
+        <p>Don't play anymore with players half your skill level in a game where you can win every time. Challenge yourself and play against players matched exactly to your level of play.</p>
+      </div>
+      <div class='box'>
+        <h3><span class='red'>Automatic</span> Game Setup</h3>
+        <p>Our site will automatically organize a tournament and give you a key to join the match instead of having to manually setup the private game every time.</p>
+      </div>
     </div>
-  </div>
-  <div class='box-row'>
-    <div class='box'>
-      <h3>Weekly <span class='red'>Tournaments</span></h3>
-      <p>Every week, MANTRACKER.co will host a tournament where you can try to become the best Culling player in the world.</p>
+    <div class='box-row'>
+      <div class='box'>
+        <h3>Weekly <span class='red'>Tournaments</span></h3>
+        <p>Every week, MANTRACKER.co will host a tournament where you can try to become the best Culling player in the world.</p>
+      </div>
+      <div class='box'>
+        <h3><span class='red'>Stat</span> Tracking</h3>
+        <p>We'll automatically track your win rate and rank on the site which is automatically updated everytime you play a game!</p>
+      </div>
     </div>
-    <div class='box'>
-      <h3><span class='red'>Stat</span> Tracking</h3>
-      <p>We'll automatically track your win rate and rank on the site which is automatically updated everytime you play a game!</p>
+    <div class='content-footer'>
+      <p>Sign in to play now!</p>
+      <img id='login-button' src='/steam_login.png'/>
     </div>
-  </div>
-  <div class='content-footer'>
-    <p>Sign in to play now!</p>
-    <img id='login-button' src='/steam_login.png'/>
-  </div>
+  {{/if}}
 </template>
