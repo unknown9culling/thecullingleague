@@ -1,6 +1,8 @@
 <template name='index'>
   {{#if currentUser}}
-    Logged in as {{currentUser.profile.id}}
+    {{#each tournaments}}
+      {{> tournament}}
+    {{/each}}
   {{else}}
     <div class='content-header'>
       <h1>High Ranked Competitive <span class='red'>Culling</span></h1>
@@ -31,4 +33,12 @@
       <img id='login-button' src='/steam_login.png'/>
     </div>
   {{/if}}
+</template>
+
+<template name="tournament">
+  <div class='tournament'>
+    <div class='title-row'><h3>{{tournamentName}}</h3><button class='join-tournament'>Join Tournament</button></div>
+    <p>{{formatDate startDate}}</p>
+    <p>{{tournamentDescription}}</p>
+  </div>
 </template>

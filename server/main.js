@@ -2,8 +2,17 @@ import '../imports/api/game'
 import '../imports/api/tournaments'
 import '../imports/accounts/accounts'
 
+SyncedCron.config({
+  log: false
+})
+
+import '../imports/schedulers/tournament_scheduler'
+
 import { Meteor } from 'meteor/meteor'
 import { ServiceConfiguration } from 'meteor/service-configuration'
+
+SyncedCron.start()
+
 Meteor.startup(function () {
   ServiceConfiguration.configurations.upsert(
     { service: 'steam' },

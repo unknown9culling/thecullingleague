@@ -8,7 +8,11 @@
       </ul>
     </div>
     <div class="profile">
+      {{#if currentUser}}
+        Logged in as {{currentUser.services.steam.personaname}}
+      {{else}}
       <img id='login-button' src='/steam_login.png'/>
+      {{/if}}
     </div>
   </div>
 </template>

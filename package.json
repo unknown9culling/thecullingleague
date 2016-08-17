@@ -10,12 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
+    "moment": "^2.14.1",
     "morgan": "^1.7.0",
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8",
-    "winston": "^2.2.0",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {

@@ -6,6 +6,7 @@ import '../imports/ui/faq.html'
 import '../imports/ui/about.html'
 import { Router } from 'meteor/iron:router'
 import { Template } from 'meteor/templating'
+import { Tournaments } from '../imports/api/tournaments.js'
 import { Meteor } from 'meteor/meteor'
 
 Router.configure({
@@ -33,5 +34,17 @@ Template.header.events({
 Template.index.events({
   'click #login-button': function() {
     Meteor.loginWithSteam()
+  }
+})
+
+Template.index.helpers({
+  tournaments() {
+    return Tournaments.find({active: true})
+  }
+})
+
+Template.tournament.helpers({
+  formatDate(date) {
+    return moment(date).format('MMMM Do YYYY, h:mm a')
   }
 })

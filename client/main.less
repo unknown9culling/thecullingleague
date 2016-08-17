@@ -80,6 +80,7 @@ a:focus {
 
 .content {
   width: 900px;
+  min-height: 800px;
   background-color: white;
   padding: 20px;
   margin: 30px auto;
@@ -128,5 +129,31 @@ footer {
 
 .footer-container {
   padding: 20px 100px;
+}
 
+.title-row {
+  display: flex;
+  h3 {
+    flex: 1 0 0;
+  }
+  button {
+    margin-top: 10px;
+    flex: 0 100px 0;
+    color: white;
+    background-color: red;
+    height: 40px;
+    text-align: center;
+    vertical-align: center;
+    border: none;
+  }
+  button:hover {
+    background-color: lighten(red, 15%);
+  }
+}
+
+.tournament {
+  margin: 5px;
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ddd;
 }
