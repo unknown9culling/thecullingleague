@@ -1,4 +1,4 @@
-import '../imports/api/game'
+import '../imports/api/games'
 import '../imports/api/tournaments'
 import '../imports/accounts/accounts'
 
@@ -7,6 +7,7 @@ SyncedCron.config({
 })
 
 import '../imports/schedulers/tournament_scheduler'
+import '../imports/schedulers/game_scheduler'
 
 import { Meteor } from 'meteor/meteor'
 import { ServiceConfiguration } from 'meteor/service-configuration'

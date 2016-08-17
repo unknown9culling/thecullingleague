@@ -37,8 +37,21 @@
 
 <template name="tournament">
   <div class='tournament'>
-    <div class='title-row'><h3>{{tournamentName}}</h3><button class='join-tournament'>Join Tournament</button></div>
+    <div class='title-row'>
+      <h3>{{tournamentName}}</h3>
+      {{#if isRegistered}}
+        <button class='leave-tournament'>Leave Tournament</button>
+      {{else}}
+        <button class='join-tournament'>Join Tournament</button>
+      {{/if}}
+    </div>
     <p>{{formatDate startDate}}</p>
     <p>{{tournamentDescription}}</p>
+    <b>Players Registered</b>
+    <ul>
+      {{#each players}}
+      <li><p>{{services.steam.personaname}}</p></li>
+      {{/each}}
+    </ul>
   </div>
 </template>

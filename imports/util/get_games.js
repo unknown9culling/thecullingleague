@@ -1,4 +1,4 @@
-export function get_games(players, game_size) {
+export function getGames(players, game_size) {
   if(players.length < 16) {
     return [players]
   } else {

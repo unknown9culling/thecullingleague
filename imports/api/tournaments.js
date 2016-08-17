@@ -4,12 +4,55 @@ import { check } from 'meteor/check'
 
 export const Tournaments = new Mongo.Collection('tournaments')
 
+Tournaments.helpers({
+  playersWithInfo() {
+    if(this.players.length === 0) {
+      return []
+    }
+    playerOr = this.players.map(function(player) {
+      return {'_id': player}
+    })
+    return Meteor.users.find({$or: playerOr})
+  }
+})
+
 Meteor.methods({
-  'tournaments.joinTournament'(steamId, tournamentId) {
-    check(steamId, String)
-    check(tournamentId, Number)
+  'tournaments.joinTournament'(tournamentId) {
+    check(tournamentId, String)
     if(!this.userId) {
       throw new Meteor.Error('not-authorized')
+    }
+
+    var tournamentToJoin = Tournaments.findOne({_id: tournamentId})
+
+    if(!tournamentToJoin) {
+      throw new Meteor.Error('not-found')
+    }
+
+    if(!tournamentToJoin.players) {
+      tournamentToJoin.players = []
+    }
+    if(tournamentToJoin.players.indexOf(this.userId) === -1) {
+      Tournaments.update({_id: tournamentToJoin._id}, {$push: {players: this.userId}})
+    }
+  },
+  'tournaments.leaveTournament'(tournamentId) {
+    check(tournamentId, String)
+    if(!this.userId) {
+      throw new Meteor.Error('not-authorized')
+    }
+
+    var tournamentToJoin = Tournaments.findOne({_id: tournamentId})
+
+    if(!tournamentToJoin) {
+      throw new Meteor.Error('not-found')
+    }
+
+    if(!tournamentToJoin.players) {
+      tournamentToJoin.players = []
+    }
+    if(tournamentToJoin.players.indexOf(this.userId) !== -1) {
+      Tournaments.update({_id: tournamentToJoin._id}, {$pull: {players: this.userId}})
     }
   }
 })

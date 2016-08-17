@@ -46,5 +46,20 @@ Template.index.helpers({
 Template.tournament.helpers({
   formatDate(date) {
     return moment(date).format('MMMM Do YYYY, h:mm a')
+  },
+  players() {
+    return this.playersWithInfo()
+  },
+  isRegistered() {
+    return this.players.indexOf(Meteor.userId()) !== -1
+  }
+})
+
+Template.tournament.events({
+  'click .leave-tournament': function() {
+    Meteor.call('tournaments.leaveTournament', this._id)
+  },
+  'click .join-tournament': function() {
+    Meteor.call('tournaments.joinTournament', this._id)
   }
 })
