@@ -1,4 +1,5 @@
 node_modules/
-lib/*.dylib
-lib/*.so
-lib/*.dll
+imports/lib/lib/*.dylib
+imports/lib/lib/*.so
+imports/lib/lib/*.dll
+npm-debug.log
