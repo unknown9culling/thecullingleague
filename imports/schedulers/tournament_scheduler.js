@@ -12,6 +12,7 @@ var scheduleTournaments = function() {
       tournamentDescription: 'Fight to the death in our ManTracker hosted weekly tournament. Every week, players will fight to win by joining the weekly tournament and earning points when they win. Play now!',
       slots: 16,
       region: 'north-america',
+      started: false,
       active: true,
       players: []
     })

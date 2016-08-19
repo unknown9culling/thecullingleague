@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor'
 import { ServiceConfiguration } from 'meteor/service-configuration'
-import { CullingAPI } from '../imports/lib/theculling'
-
-TheCullingUS = new CullingAPI()
+import { TheCullingUS } from '../imports/lib/theculling'
 
 import '../imports/api/games'
 import '../imports/api/tournaments'
+import '../imports/api/votes'
+
 import '../imports/accounts/accounts'
 
 SyncedCron.config({

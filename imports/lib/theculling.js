@@ -22,14 +22,14 @@ API_SERVER = 'https://clientweb-us-east.theculling.net'
 
 export class CullingAPI {
   constructor(api_server) {
-    this.busy = false
+    this.busy = true
     winston.log('info', 'Initializing Steamworks API...')
 
     greenworks.send('initAPI')
   }
   login() {
     var self = this
-    return getAuthSessionTicket().then(function(auth_session) {
+    return getAuthSessionTicket().then((auth_session) => {
       let ticket = auth_session.ticket
       return rp({
         method: 'POST',
@@ -42,7 +42,10 @@ export class CullingAPI {
         },
         jar: jar
       })
-    }).then(this.loginSockets)
+    }).then(this.loginSockets).then((socket) => {
+      self.socket = socket
+      this.busy = false
+    })
   }
   getStatus() {
     return rp({
@@ -51,41 +54,40 @@ export class CullingAPI {
     })
   }
   loginSockets(status) {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if(typeof(status) === 'string') {
         status = JSON.parse(status)
       }
-      var socket = socketClient.connect(API_SERVER)
+      this.socket = socketClient.connect(API_SERVER)
 
-      socket.on('connect', function() {
+      this.socket.on('connect', () => {
         winston.log('info', 'Connected to matchmaking server.')
-        socket.emit('login', status.sessionID)
+        this.socket.emit('login', status.sessionID)
       })
-      socket.on('auth-response', function(status) {
+      this.socket.on('auth-response', (status) => {
         winston.log('info', 'Login status: ' + status)
-        resolve(socket)
+        resolve(this.socket)
       })
     })
   }
   launchGame(numPlayers, cb) {
-    var self = this
     this.busy = true
     var calledBack = false
 
-    socket.emit('lobby-leave') // make sure we aren't already in a lobby
-    socket.emit('lobby-create')
-    socket.on('match-ready', function() {
-      socket.emit('lobby-leave')
-      self.busy = false
+    this.socket.emit('lobby-leave') // make sure we aren't already in a lobby
+    this.socket.emit('lobby-create')
+    this.socket.on('match-ready', () => {
+      this.socket.emit('lobby-leave')
+      this.busy = false
     })
 
-    setTimeout(function() {
-      self.busy = false
+    setTimeout(() => {
+      this.busy = false
       calledBack = true
       cb('Couldn\'t create lobby!')
     }, 10000)
 
-    socket.on('lobby-update', function(lobbyStatus) {
+    this.socket.on('lobby-update', (lobbyStatus) => {
       if(typeof(lobbyStatus) === 'string') {
         lobbyStatus = JSON.parse(lobbyStatus)
       }
@@ -93,8 +95,10 @@ export class CullingAPI {
         cb(null, lobbyStatus.code)
       }
       if(lobbyStatus.members.length === numPlayers + 1) {
-        socket.emit('lobby-start-match')
+        this.socket.emit('lobby-start-match')
       }
     })
   }
 }
+
+export var TheCullingUS = new CullingAPI()
