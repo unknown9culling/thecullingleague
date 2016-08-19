@@ -13,6 +13,9 @@ Tournaments.helpers({
       return {'_id': player}
     })
     return Meteor.users.find({$or: playerOr})
+  },
+  openForRegistration() {
+    return new Date() > new Date(this.endRegister)
   }
 })
 

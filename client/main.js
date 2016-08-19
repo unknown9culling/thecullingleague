@@ -7,6 +7,7 @@ import '../imports/ui/about.html'
 import { Router } from 'meteor/iron:router'
 import { Template } from 'meteor/templating'
 import { Tournaments } from '../imports/api/tournaments.js'
+import { Games } from '../imports/api/games.js'
 import { Meteor } from 'meteor/meteor'
 
 Router.configure({
@@ -61,5 +62,15 @@ Template.tournament.events({
   },
   'click .join-tournament': function() {
     Meteor.call('tournaments.joinTournament', this._id)
+  }
+})
+
+Template.currentgame.helpers({
+  currentGames() {
+    return Games.find({
+      players: {
+        $in: [Meteor.userId()]
+      }
+    })
   }
 })

@@ -83,8 +83,6 @@ export class CullingAPI {
 
     setTimeout(() => {
       this.busy = false
-      calledBack = true
-      cb('Couldn\'t create lobby!')
     }, 10000)
 
     this.socket.on('lobby-update', (lobbyStatus) => {

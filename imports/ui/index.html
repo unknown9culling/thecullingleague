@@ -1,5 +1,6 @@
 <template name='index'>
   {{#if currentUser}}
+    {{> currentgame}}
     {{#each tournaments}}
       {{> tournament}}
     {{/each}}
@@ -45,7 +46,7 @@
         <button class='join-tournament'>Join Tournament</button>
       {{/if}}
     </div>
-    <p>{{formatDate startDate}}</p>
+    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openToRegistration}}Open For Registration{{else}}Closed to Registration{{/if}}</p>
     <p>{{tournamentDescription}}</p>
     <b>Players Registered</b>
     <ul>
@@ -54,4 +55,13 @@
       {{/each}}
     </ul>
   </div>
+</template>
+
+<template name="currentgame">
+  {{#each currentGames}}
+    <div class='game'>
+      <div class='title'>{{tournament.tournamentName}} Round #{{round}}</div>
+      <div class='join-game'>Join game: {{code}}</div>
+    </div>
+  {{/each}}
 </template>
