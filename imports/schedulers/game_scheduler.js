@@ -7,9 +7,9 @@ import moment from 'moment'
 
 var gameStart = function(game) {
   if(TheCullingUS.busy === false) {
-    console.log('starting game')
-    TheCullingUS.launchGame(game.players.length, Meteor.bindEnvironment(function(err, code) {
-      console.log('got code: ' + code)
+    TheCullingUS.launchGame(game.players.length, Meteor.bindEnvironment(function(err, data) {
+      code = data.code
+      members = data.players
       if(err) {
         Games.update({_id: game._id}, {$set: {status: 'Errored'}})
       } else {
@@ -17,8 +17,6 @@ var gameStart = function(game) {
       }
     }))
     Games.update({_id: game._id}, {$set: {started: true}})
-  } else {
-    console.log('BUSY!')
   }
 }
 
@@ -30,7 +28,9 @@ var tournamentStart = function(tournament) {
       round: 1,
       started: false,
       status: 'Active',
-      active: true
+      active: true,
+      toJoin: moment().add(5, 'minutes').toDate(),
+      gameEnd: moment().add(30, 'minutes').toDate()
     })
     Tournaments.update({_id: tournament._id}, {$set: {started: true}})
   } else {

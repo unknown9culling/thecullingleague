@@ -59,12 +59,25 @@
 </template>
 
 <template name="currentgame">
+  {{#if currentGame}}
     <div class='game'>
-      <div class='title'>{{currentGame.tournament.tournamentName}} Round #{{currentGame.round}}</div>
-      <div class='join-game'>Join game: {{currentGame.code}}</div>
-      <button class='answer yes modal-button report-player' data-modal-template='report-player-modal'>Report Player!</button>
-      <button class='answer yes modal-button report-score' data-modal-template='report-score-modal'>Report Score!</button>
+      <div class='game-header'>
+        <div class='title'>{{currentGame.tournament.tournamentName}} Round #{{currentGame.round}}</div>
+        <div class='join-game'>Join game: {{currentGame.code}}</div>
+        <button class='answer yes modal-button report-player' data-modal-template='report-player-modal'>Report Player!</button>
+        <button class='answer yes modal-button report-score' data-modal-template='report-score-modal'>Report Score!</button>
+      </div>
+      <div class='game-content'>
+        Players
+        <ul>
+          {{#each currentGame.playersWithInfo}}
+            <li>{{services.steam.personaname}}</li>
+          {{/each}}
+        </ul>
+        Join Game by: {{momentUntil currentGame.toJoin}}
+      </div>
     </div>
+  {{/if}}
 </template>
 
 <template name="modal">

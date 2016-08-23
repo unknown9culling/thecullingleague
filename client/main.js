@@ -73,6 +73,9 @@ Template.currentgame.helpers({
         $in: [Meteor.userId()]
       }
     })
+  },
+  momentUntil(date) {
+    return moment(date).fromNow(true)
   }
 })
 
