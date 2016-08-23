@@ -11,6 +11,15 @@ Games.helpers({
   winner() {
     return Votes.findOne({
       gameId: this._id
-    }, {sort: {_id:-1}}).player
+    }, {sort: {_id: -1}}).player
+  },
+  playersWithInfo() {
+    if(this.players.length === 0) {
+      return []
+    }
+    playerOr = this.players.map(function(player) {
+      return {'_id': player}
+    })
+    return Meteor.users.find({$or: playerOr})
   }
 })

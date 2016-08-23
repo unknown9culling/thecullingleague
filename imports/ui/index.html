@@ -1,4 +1,5 @@
 <template name='index'>
+  {{> modal}}
   {{#if currentUser}}
     {{> currentgame}}
     {{#each tournaments}}
@@ -58,10 +59,53 @@
 </template>
 
 <template name="currentgame">
-  {{#each currentGames}}
     <div class='game'>
-      <div class='title'>{{tournament.tournamentName}} Round #{{round}}</div>
-      <div class='join-game'>Join game: {{code}}</div>
+      <div class='title'>{{currentGame.tournament.tournamentName}} Round #{{currentGame.round}}</div>
+      <div class='join-game'>Join game: {{currentGame.code}}</div>
+      <button class='answer yes modal-button report-player' data-modal-template='report-player-modal'>Report Player!</button>
+      <button class='answer yes modal-button report-score' data-modal-template='report-score-modal'>Report Score!</button>
     </div>
-  {{/each}}
+</template>
+
+<template name="modal">
+  {{#if activeModal}}
+    <div class='page-cover'></div>
+    <div class="man-modal">
+      {{> Template.dynamic template=activeModal}}
+    </div>
+  {{/if}}
+</template>
+
+<template name="check-report-score-modal">
+  <h3>Would you like to report the winner of your last game?</h3>
+  <div class='answers'>
+    <button class='answer yes modal-button' data-modal-template='report-score-modal'>Yes</button>
+    <button class='answer no modal-button' data-modal-template=''>No</button>
+  </div>
+</template>
+
+<template name="report-player-modal">
+  <div class='report-form'>
+    <label for='player-name'>What was the players name?</label><br/>
+    <select name='player-name' class='player-name'>
+      {{#each currentGame.playersWithInfo}}
+        <option data-id='{{_id}}'>{{services.steam.personaname}}</option>
+      {{/each}}
+    </select><br/><br/>
+    <label for='report-info'>What did this player do? (please describe in detail and provide proof such as logs, screenshots or videos)</label><br/>
+    <input type='textarea' name='report-info' class='report-info'/><br/><br/>
+    <button class='answer no modal-button report-player' data-modal-template=''>Report!</button>
+  </div>
+</template>
+
+<template name="report-score-modal">
+  <div class='score-form'>
+    <h3>Who won the game? (WARNING: if you do not answer this truthfully you WILL be permanently banned from the site with no appeal.)</h3>
+    <div class='answers'>
+      {{#each currentGame.playersWithInfo}}
+        <button class='answer player modal-button' data-modal-template='' data-id='{{_id}}'>{{services.steam.personaname}}</button>
+      {{/each}}
+      <button class='answer no modal-button' data-modal-template=''>I Don't Know or don't want to answer!</button>
+    </div>
+  </div>
 </template>

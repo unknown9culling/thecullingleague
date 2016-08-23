@@ -9,6 +9,7 @@ import { Template } from 'meteor/templating'
 import { Tournaments } from '../imports/api/tournaments.js'
 import { Games } from '../imports/api/games.js'
 import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
 
 Router.configure({
   layoutTemplate: 'layout'
@@ -66,11 +67,47 @@ Template.tournament.events({
 })
 
 Template.currentgame.helpers({
-  currentGames() {
-    return Games.find({
+  currentGame() {
+    return Games.findOne({
       players: {
         $in: [Meteor.userId()]
       }
     })
+  }
+})
+
+Template['report-score-modal'].helpers({
+  currentGame() {
+    return Games.findOne({
+      players: {
+        $in: [Meteor.userId()]
+      }
+    })
+  }
+})
+
+Template['report-player-modal'].helpers({
+  currentGame() {
+    return Games.findOne({
+      players: {
+        $in: [Meteor.userId()]
+      }
+    })
+  }
+})
+
+Template.index.events({
+  'click .modal-button': function(event, template) {
+    var name = template.$(event.target).data('modal-template')
+    Session.set('activeModal', name)
+  },
+  'click .page-cover': function() {
+    Session.set('activeModal')
+  }
+})
+
+Template.modal.helpers({
+  activeModal: function() {
+    return Session.get('activeModal')
   }
 })

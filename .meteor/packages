@@ -30,3 +30,4 @@ percolate:synced-cron
 momentjs:moment
 dburles:collection-helpers
 shell-server
+session
