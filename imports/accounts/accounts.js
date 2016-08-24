@@ -7,3 +7,7 @@ Accounts.onCreateUser(function(options, user) {
   user.services.steam = response.data.response.players[0]
   return user
 })
+
+Meteor.publish(null, function() {
+  return Meteor.users.find({_id: this.userId})
+})

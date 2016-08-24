@@ -27,6 +27,11 @@ Router.route('/about', function () {
   this.render('about')
 })
 
+Template.body.onCreated(function() {
+  Meteor.subscribe('games')
+  Meteor.subscribe('tournaments')
+})
+
 Template.header.events({
   'click #login-button': function() {
     Meteor.loginWithSteam()
@@ -69,13 +74,14 @@ Template.tournament.events({
 Template.currentgame.helpers({
   currentGame() {
     return Games.findOne({
-      players: {
-        $in: [Meteor.userId()]
-      }
+      // players: {
+      //   $in: [Meteor.userId()]
+      // },
+      // active: true
     })
   },
   momentUntil(date) {
-    return moment(date).fromNow(true)
+    return moment(date).from(TimeSync.serverTime())
   }
 })
 

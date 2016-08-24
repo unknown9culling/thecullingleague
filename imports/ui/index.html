@@ -47,7 +47,7 @@
         <button class='join-tournament'>Join Tournament</button>
       {{/if}}
     </div>
-    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openToRegistration}}Open For Registration{{else}}Closed to Registration{{/if}}</p>
+    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openForRegistration}}Open For Registration{{else}}Closed to Registration{{/if}}</p>
     <p>{{tournamentDescription}}</p>
     <b>Players Registered</b>
     <ul>
@@ -74,7 +74,8 @@
             <li>{{services.steam.personaname}}</li>
           {{/each}}
         </ul>
-        Join Game by: {{momentUntil currentGame.toJoin}}
+        Join game {{momentUntil currentGame.toJoin}} or less<br/>
+        Last chance to report a winner is {{momentUntil currentGame.gameEnd}}
       </div>
     </div>
   {{/if}}

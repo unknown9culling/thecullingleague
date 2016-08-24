@@ -20,7 +20,7 @@ Meteor.methods({
       throw new Meteor.Error('player-not-found')
     }
 
-    if(!games.active) {
+    if(!gameToVoteFor.active) {
       throw new Meteor.Error('cannot-vote-on-inactive-game')
     }
 

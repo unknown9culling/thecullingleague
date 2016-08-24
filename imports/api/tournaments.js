@@ -4,6 +4,12 @@ import { check } from 'meteor/check'
 
 export const Tournaments = new Mongo.Collection('tournaments')
 
+if (Meteor.isServer) {
+  Meteor.publish('tournaments', function() {
+    return Tournaments.find({})
+  })
+}
+
 Tournaments.helpers({
   playersWithInfo() {
     if(this.players.length === 0) {
@@ -15,7 +21,7 @@ Tournaments.helpers({
     return Meteor.users.find({$or: playerOr})
   },
   openForRegistration() {
-    return new Date() > new Date(this.endRegister)
+    return new Date() < new Date(this.endRegister)
   }
 })
 

@@ -27,28 +27,14 @@ export var tournamentStart = function(tournament) {
     gamesToSchedule.forEach((game) => {
       var gameId = Games.insert({
         tournamentId: tournament._id,
-        players: game.players,
+        players: game,
         round: tournament.round,
         started: false,
         status: 'Active',
         active: true,
         eliminated: false,
-        toJoin: moment().add(5, 'minutes').add(timeOffset, 'minutes').toDate(),
-        gameEnd: moment().add(30, 'minutes').add(timeOffset, 'minutes').toDate()
-      })
-      SyncedCron.add({
-        name: 'Check for game end, ID: ' + gameId,
-        schedule: function(parser) {
-          // parser is a later.parse object
-          return parser.text('every 2 seconds')
-        },
-        job: function() {
-          var game = Games.findOne({_id: gameId})
-          if(new Date() > new Date(game.gameEnd)) {
-            Games.update({_id: game._id}, {$set: {active: false}})
-            SyncedCron.remove('Check for game end, ID: ' + gameId)
-          }
-        }
+        toJoin: moment().add(1, 'minutes').add(timeOffset, 'minutes').toDate(),
+        gameEnd: moment().add(3, 'minutes').add(timeOffset, 'minutes').toDate()
       })
       timeOffset += 5.2 // leave about 5 minutes between starting games
     })
@@ -105,6 +91,15 @@ export var checkForRoundFinish = function() {
   })
 }
 
+export var checkForGameEnd = function() {
+  var games = Games.find({active: true})
+  games.forEach(function(game) {
+    if(new Date() > new Date(game.gameEnd)) {
+      Games.update({_id: game._id}, {$set: {active: false}})
+    }
+  })
+}
+
 SyncedCron.add({
   name: 'Check for tournament start',
   schedule: function(parser) {
@@ -121,6 +116,15 @@ SyncedCron.add({
     return parser.text('every 2 seconds')
   },
   job: checkForRoundFinish
+})
+
+SyncedCron.add({
+  name: 'Check for game finish',
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text('every 2 seconds')
+  },
+  job: checkForGameEnd
 })
 
 SyncedCron.add({
