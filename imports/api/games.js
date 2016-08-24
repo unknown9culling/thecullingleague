@@ -9,9 +9,23 @@ Games.helpers({
     return Tournaments.findOne({_id: this.tournamentId})
   },
   winner() {
-    return Votes.findOne({
+    var possibleWinners = Votes.find({
       gameId: this._id
-    }, {sort: {_id: -1}}).player
+    })
+    var winnerMap = {}
+    possibleWinners.forEach(function(winner) {
+      if(!winnerMap.hasOwnProperty(winner.player)) {
+        winnerMap[winner.player] = 1
+      } else {
+        winnerMap[winner.player] += 1
+      }
+    })
+    var winner = Object.keys(winnerMap).reduce(function(a, b){ return winnerMap[a] > winnerMap[b] ? a : b })
+    if(winner !== undefined) {
+      return winner
+    } else {
+      return null
+    }
   },
   playersWithInfo() {
     if(this.players.length === 0) {

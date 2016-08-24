@@ -36,7 +36,7 @@ Meteor.methods({
       tournamentToJoin.players = []
     }
     if(tournamentToJoin.players.indexOf(this.userId) === -1) {
-      Tournaments.update({_id: tournamentToJoin._id}, {$push: {players: this.userId}})
+      Tournaments.update({_id: tournamentToJoin._id}, {$push: {players: this.userId, players_left: this.userId}})
     }
   },
   'tournaments.leaveTournament'(tournamentId) {
@@ -55,7 +55,7 @@ Meteor.methods({
       tournamentToJoin.players = []
     }
     if(tournamentToJoin.players.indexOf(this.userId) !== -1) {
-      Tournaments.update({_id: tournamentToJoin._id}, {$pull: {players: this.userId}})
+      Tournaments.update({_id: tournamentToJoin._id}, {$pull: {players: this.userId, players_left: this.userId}})
     }
   }
 })

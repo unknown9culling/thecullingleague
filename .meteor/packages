@@ -31,3 +31,6 @@ momentjs:moment
 dburles:collection-helpers
 shell-server
 session
+practicalmeteor:mocha
+practicalmeteor:chai
+hwillson:stub-collections

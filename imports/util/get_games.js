@@ -1,5 +1,5 @@
 export function getGames(players, game_size) {
-  if(players.length < 16) {
+  if(players.length <= game_size) {
     return [players]
   } else {
     var min_games = Math.ceil(players.length / game_size)

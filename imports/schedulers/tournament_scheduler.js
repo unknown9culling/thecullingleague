@@ -14,7 +14,10 @@ var scheduleTournaments = function() {
       region: 'north-america',
       started: false,
       active: true,
-      players: []
+      players: [],
+      players_left: [],
+      round: 1,
+      winner: null
     })
   }
 }
