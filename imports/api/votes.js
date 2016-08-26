@@ -37,5 +37,7 @@ Meteor.methods({
       gameId: gameId,
       player: winner
     })
+
+    Meteor.users.update({'_id': this.userId}, {$inc: {rank: 1}})
   }
 })

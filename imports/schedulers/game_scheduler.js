@@ -33,8 +33,8 @@ export var tournamentStart = function(tournament) {
         status: 'Active',
         active: true,
         eliminated: false,
-        toJoin: moment().add(1, 'minutes').add(timeOffset, 'minutes').toDate(),
-        gameEnd: moment().add(3, 'minutes').add(timeOffset, 'minutes').toDate()
+        toJoin: moment().add(5, 'minutes').add(timeOffset, 'minutes').toDate(),
+        gameEnd: moment().add(30, 'minutes').add(timeOffset, 'minutes').toDate()
       })
       timeOffset += 5.2 // leave about 5 minutes between starting games
     })
@@ -82,10 +82,12 @@ export var checkForRoundFinish = function() {
     if(stillGoing === 0) {
       if(tournament.players_left.length === 1) {
         tournament.winner = tournament.players_left[0]
+        if(tournament.players_left[0] !== null) {
+          Meteor.users.update({_id: tournament.players_left[0]}, {$inc: {rank: 15}})
+        }
         Tournaments.update({_id: tournament._id}, {$set: {winner: tournament.players_left[0], active: false}})
       } else {
         Tournaments.update({_id: tournament._id}, {$inc: {round: 1}})
-
       }
     }
   })
