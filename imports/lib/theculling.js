@@ -35,7 +35,7 @@ export class CullingAPI {
       form: {
         authTicket: ticket,
         appid: 437220,
-        build: '2016.08.08_93315_Full',
+        build: '2016.08.24_93811_Full',
         rank: 551
       },
       jar: jar
