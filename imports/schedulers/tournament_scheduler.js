@@ -6,8 +6,8 @@ var scheduleTournaments = function() {
   if(count == 0) {
     // schedule an upcoming tournament
     Tournaments.insert({
-      startDate: moment().add(2, 'minutes').toDate(),
-      endRegister: moment().add(1, 'minutes').toDate(),
+      startDate: moment().add(60, 'minutes').toDate(),
+      endRegister: moment().add(70, 'minutes').toDate(),
       tournamentName: 'Weekly ManTracker.co Tournament',
       tournamentDescription: 'Fight to the death in our ManTracker hosted weekly tournament. Every week, players will fight to win by joining the weekly tournament and earning points when they win. Play now!',
       slots: 64,
