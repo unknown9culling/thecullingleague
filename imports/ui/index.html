@@ -114,10 +114,10 @@
 
 <template name="report-score-modal">
   <div class='score-form'>
-    <h3>Who won the game? (WARNING: if you do not answer this truthfully you WILL be permanently banned from the site with no appeal.)</h3>
+    <h3>Who won the game? (WARNING: answer truthfully or you will be banned) [1 free rank point for reporting]</h3>
     <div class='answers'>
       {{#each currentGame.playersWithInfo}}
-        <button class='answer player modal-button' data-modal-template='' data-id='{{_id}}'>{{services.steam.personaname}}</button>
+        <button class='answer player modal-button report-winner' data-modal-template='' data-id='{{_id}}' data-game-id='{{currentGame._id}}'>{{services.steam.personaname}}</button>
       {{/each}}
       <button class='answer no modal-button' data-modal-template=''>I Don't Know or don't want to answer!</button>
     </div>

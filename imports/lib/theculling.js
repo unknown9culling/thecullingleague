@@ -27,21 +27,18 @@ export class CullingAPI {
 
     greenworks.send('initAPI')
   }
-  login() {
+  login(ticket) {
     var self = this
-    return getAuthSessionTicket().then((auth_session) => {
-      let ticket = auth_session.ticket
-      return rp({
-        method: 'POST',
-        uri: API_SERVER + '/api/login',
-        form: {
-          authTicket: ticket,
-          appid: 437220,
-          build: '2016.08.08_93315_Full',
-          rank: 551
-        },
-        jar: jar
-      })
+    return rp({
+      method: 'POST',
+      uri: API_SERVER + '/api/login',
+      form: {
+        authTicket: ticket,
+        appid: 437220,
+        build: '2016.08.08_93315_Full',
+        rank: 551
+      },
+      jar: jar
     }).then(this.loginSockets).then((socket) => {
       self.socket = socket
       this.busy = false

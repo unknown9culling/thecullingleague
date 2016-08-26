@@ -74,10 +74,7 @@ Template.tournament.events({
 Template.currentgame.helpers({
   currentGame() {
     return Games.findOne({
-      // players: {
-      //   $in: [Meteor.userId()]
-      // },
-      // active: true
+      active: true
     })
   },
   momentUntil(date) {
@@ -112,6 +109,11 @@ Template.index.events({
   },
   'click .page-cover': function() {
     Session.set('activeModal')
+  },
+  'click .report-winner': function(event, template) {
+    playerId = template.$(event.target).data('id')
+    gameId = template.$(event.target).data('game-id')
+    Meteor.call('votes.voteForWinner', gameId, playerId)
   }
 })
 
