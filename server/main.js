@@ -15,7 +15,7 @@ SyncedCron.config({
 import '../imports/schedulers/tournament_scheduler'
 import '../imports/schedulers/game_scheduler'
 
-TheCullingUS.login(process.env.authTicket)
+TheCullingUS.login()
 
 SyncedCron.start()
 

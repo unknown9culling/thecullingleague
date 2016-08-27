@@ -1,16 +1,24 @@
-@import 'https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700';
+@import 'https://fonts.googleapis.com/css?family=Abel:400,700';
 
 body {
   text-transform: uppercase;
-  font-family: 'Roboto Condensed', sans-serif;
-  background-color: #eee;
+  font-family: 'Abel', sans-serif;
   font-size: 13pt;
+  color: white;
+}
+
+.background {
+  position: fixed;
+  z-index: -100000;
+  -webkit-filter: blur(15px);
+  height: 190%;
+  left: -30px;
+  top: -30px;
 }
 
 header {
   height: 100px;
-  border-bottom: 2px #ddd solid;
-  background-color: #fff;
+  background-color: rgba(0,0,0,0.8);
 }
 
 a:hover {
@@ -45,10 +53,10 @@ a:focus {
       display: inline-block;
       padding: 10px;
       a {
-        color: #444;
+        color: #aaa;
       }
       a:hover {
-        color: #888;
+        color: #fff;
         text-decoration: none;
       }
     }
@@ -56,7 +64,6 @@ a:focus {
 }
 
 .profile {
-  flex: 1 200px 0;
   align-self: center;
   text-align: right;
 }
@@ -65,12 +72,16 @@ a:focus {
   cursor: pointer;
 }
 
+a {
+  color: white;
+}
+
 .man {
   color: red;
 }
 
 .tracker {
-  color: #3c3d4d;
+  color: #fff;
   font-weight: 700;
 }
 
@@ -81,13 +92,15 @@ a:focus {
 .content {
   width: 1000px;
   min-height: 800px;
-  background-color: white;
+  background-color: black;
+  color: white;
   padding: 20px;
   margin: 30px auto;
+  box-shadow: 0px 0px 10px black;
   p {
     text-transform: none;
   }
-  border: #ddd solid 1px;
+  border: #555 solid 1px;
 }
 
 .content-header {
@@ -105,8 +118,8 @@ a:focus {
 
 .box {
   flex: 1 0 0;
-  background-color: #eee;
-  border: 1px #ddd solid;
+  background-color: #222;
+  border: 1px #555 solid;
   padding: 15px;
   margin: 10px;
 }
@@ -123,7 +136,7 @@ a:focus {
 }
 
 footer {
-  background-color: red;
+  background-color: rgba(0,0,0,0.8);
   color: white;
 }
 
@@ -162,15 +175,15 @@ footer {
 .tournament {
   margin: 5px;
   padding: 10px;
-  background-color: #eee;
-  border: 1px solid #ddd;
+  background-color: #222;
+  border: 1px solid #555;
 }
 
 .game {
   margin: 5px;
   padding: 10px;
-  background-color: lighten(red, 40%);
-  border: 1px solid red;
+  background-color: red;
+  border: 1px solid darken(red, 50%);
 }
 
 .game-content {
@@ -191,31 +204,31 @@ footer {
     text-transform: uppercase;
     margin-right: 10px;
     cursor: help;
-    background-color: red;
+    background-color: black;
     display: block;
   }
 }
 
 .report-player {
   border: none;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   margin-right: 10px;
   text-transform: uppercase;
 }
 
 .report-score {
   border: none;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   text-transform: uppercase;
 }
 
 .man-modal {
   text-transform: none;
   position: absolute;
-  background-color: white;
-  border: 1px #ddd solid;
+  background-color: black;
+  border: 1px #555 solid;
   padding: 25px;
   height: 500px;
   left: 50%;

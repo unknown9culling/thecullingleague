@@ -3,14 +3,25 @@ var winston = require('winston')
 var rp = require('request-promise')
 var socketClient = require('socket.io-client')
 var jar = rp.jar()
+var greenworks
+if(!process.env.authTicket) {
+  greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
+} else {
+  greenworks = new (class GreenworksStub {
+    send() {
 
-var greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
+    }
+    on(not_needed, cb) {
+      cb(process.env.authTicket)
+    }
+  })()
+}
 
 function getAuthSessionTicket() {
   return new Promise(function(resolve, reject) {
     greenworks.send('getAuthSessionTicket')
     greenworks.on('message', function(ticket) {
-      resolve(ticket)
+      resolve(ticket.ticket)
     })
     setTimeout(function() {
       reject()
@@ -27,18 +38,20 @@ export class CullingAPI {
 
     greenworks.send('initAPI')
   }
-  login(ticket) {
+  login() {
     var self = this
-    return rp({
-      method: 'POST',
-      uri: API_SERVER + '/api/login',
-      form: {
-        authTicket: ticket,
-        appid: 437220,
-        build: '2016.08.23_93811_Full',
-        rank: 551
-      },
-      jar: jar
+    return getAuthSessionTicket().then((ticket) => {
+      return rp({
+        method: 'POST',
+        uri: API_SERVER + '/api/login',
+        form: {
+          authTicket: ticket,
+          appid: 437220,
+          build: '2016.08.23_93811_Full',
+          rank: 551
+        },
+        jar: jar
+      })
     }).then(this.loginSockets).then((socket) => {
       self.socket = socket
       this.busy = false
@@ -78,7 +91,6 @@ export class CullingAPI {
     this.socket.on('match-ready', (match) => {
       this.socket.emit('lobby-leave')
       this.busy = false
-      console.log(match)
     })
 
     setTimeout(() => {
@@ -86,21 +98,19 @@ export class CullingAPI {
     }, 10000)
 
     var checkForGameStart = setInterval(function() {
-      console.log(new Date() - new Date(timeout), timeout)
-      // if(new Date() > new Date(timeout)) {
-      //  if(numPlayers > 1) {
-      //    this.socket.emit('lobby-start-match')
-      //  } else {
-      //    cb(null, {code: '', players: []})
-      //  }
-      //}
+      if(new Date() > new Date(timeout)) {
+        if(numPlayers > 1) {
+          this.socket.emit('lobby-start-match')
+        } else {
+          cb(null, {code: '', players: []})
+        }
+      }
     }, 1000)
 
     this.socket.on('lobby-update', (lobbyStatus) => {
       if(typeof(lobbyStatus) === 'string') {
         lobbyStatus = JSON.parse(lobbyStatus)
       }
-      console.log(lobbyStatus)
       if(!calledBack) {
         cb(null, {code: lobbyStatus.code, players: lobbyStatus.members})
       }

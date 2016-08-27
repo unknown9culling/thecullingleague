@@ -9,7 +9,7 @@
     </div>
     <div class="profile">
       {{#if currentUser}}
-        Logged in as {{currentUser.services.steam.personaname}} - {{currentUser.rank}} ranking points
+        Logged in as {{currentUser.services.steam.personaname}}<br/>{{#if currentUser.rank}}{{currentUser.rank}}{{else}}0{{/if}} ranking points
       {{else}}
       <img id='login-button' src='/steam_login.png'/>
       {{/if}}
