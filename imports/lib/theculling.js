@@ -4,18 +4,7 @@ var rp = require('request-promise')
 var socketClient = require('socket.io-client')
 var jar = rp.jar()
 var greenworks
-if(!process.env.authTicket) {
-  greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
-} else {
-  greenworks = new (class GreenworksStub {
-    send() {
-
-    }
-    on(not_needed, cb) {
-      cb(process.env.authTicket)
-    }
-  })()
-}
+greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
 
 function getAuthSessionTicket() {
   return new Promise(function(resolve, reject) {
@@ -24,7 +13,7 @@ function getAuthSessionTicket() {
       resolve(ticket.ticket)
     })
     setTimeout(function() {
-      reject()
+      resolve(process.env.authTicket)
     }, 5000)
   })
 }
