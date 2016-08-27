@@ -62,7 +62,7 @@ export var checkForGameStart = function() {
 }
 
 export var checkForRoundFinish = function() {
-  var activeTournaments = Tournaments.find({started: true})
+  var activeTournaments = Tournaments.find({started: true, active: true})
   activeTournaments.forEach(function(tournament) {
     var finishedGames = Games.find({active: false, tournamentId: tournament._id, round: tournament.round, eliminated: false})
 
