@@ -27,25 +27,6 @@ export class CullingAPI {
 
     greenworks.send('initAPI')
   }
-  login() {
-    var self = this
-    return getAuthSessionTicket().then((ticket) => {
-      return rp({
-        method: 'POST',
-        uri: API_SERVER + '/api/login',
-        form: {
-          authTicket: ticket,
-          appid: 437220,
-          build: '2016.08.23_93811_Full',
-          rank: 551
-        },
-        jar: jar
-      })
-    }).then(this.loginSockets).then((socket) => {
-      self.socket = socket
-      this.busy = false
-    })
-  }
   getStatus() {
     return rp({
       uri: API_SERVER + '/api',
@@ -67,6 +48,25 @@ export class CullingAPI {
         winston.log('info', 'Login status: ' + status)
         resolve(this.socket)
       })
+    })
+  }
+  login() {
+    var self = this
+    return getAuthSessionTicket().then((ticket) => {
+      return rp({
+        method: 'POST',
+        uri: API_SERVER + '/api/login',
+        form: {
+          authTicket: ticket,
+          appid: 437220,
+          build: '2016.08.23_93811_Full',
+          rank: 551
+        },
+        jar: jar
+      })
+    }).then(this.loginSockets).then((socket) => {
+      self.socket = socket
+      this.busy = false
     })
   }
   launchGame(numPlayersBeforeStart, cb, timeout) {
