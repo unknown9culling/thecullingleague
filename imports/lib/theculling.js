@@ -35,7 +35,7 @@ export class CullingAPI {
       form: {
         authTicket: ticket,
         appid: 437220,
-        build: '2016.08.24_93811_Full',
+        build: '2016.08.23_93811_Full',
         rank: 551
       },
       jar: jar
@@ -67,7 +67,7 @@ export class CullingAPI {
       })
     })
   }
-  launchGame(numPlayers, cb, timeout) {
+  launchGame(numPlayersBeforeStart, cb, timeout) {
     this.busy = true
     var calledBack = false
 
@@ -75,9 +75,10 @@ export class CullingAPI {
 
     this.socket.emit('lobby-leave') // make sure we aren't already in a lobby
     this.socket.emit('lobby-create')
-    this.socket.on('match-ready', () => {
+    this.socket.on('match-ready', (match) => {
       this.socket.emit('lobby-leave')
       this.busy = false
+      console.log(match)
     })
 
     setTimeout(() => {
@@ -85,24 +86,26 @@ export class CullingAPI {
     }, 10000)
 
     var checkForGameStart = setInterval(function() {
-      if(new Date() > new Date(timeout)) {
-        if(numPlayers > 0) {
-          this.socket.emit('lobby-start-match')
-        } else {
-          cb(null, {code: '', players: []})
-        }
-      }
+      console.log(new Date() - new Date(timeout), timeout)
+      // if(new Date() > new Date(timeout)) {
+      //  if(numPlayers > 1) {
+      //    this.socket.emit('lobby-start-match')
+      //  } else {
+      //    cb(null, {code: '', players: []})
+      //  }
+      //}
     }, 1000)
 
     this.socket.on('lobby-update', (lobbyStatus) => {
       if(typeof(lobbyStatus) === 'string') {
         lobbyStatus = JSON.parse(lobbyStatus)
       }
+      console.log(lobbyStatus)
       if(!calledBack) {
         cb(null, {code: lobbyStatus.code, players: lobbyStatus.members})
       }
-      numPlayers = lobbyStatus.members.length - 1
-      if(lobbyStatus.members.length === numPlayers + 1) {
+      numPlayers = lobbyStatus.members.length
+      if(numPlayers === numPlayersBeforeStart + 1) {
         this.socket.emit('lobby-start-match')
       }
     })
