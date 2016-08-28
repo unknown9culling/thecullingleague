@@ -9,5 +9,5 @@ Accounts.onCreateUser(function(options, user) {
 })
 
 Meteor.publish(null, function() {
-  return Meteor.users.find({})
+  return Meteor.users.find({}, {'services.resume': 0})
 })

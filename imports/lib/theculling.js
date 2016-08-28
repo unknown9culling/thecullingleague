@@ -69,11 +69,11 @@ export class CullingAPI {
       this.busy = false
     })
   }
-  launchGame(numPlayersBeforeStart, cb, timeout) {
+  launchGame(numPlayersBeforeStart, cb, timeout, cb_start) {
     this.busy = true
     var calledBack = false
 
-    numPlayers = 0
+    players = []
 
     this.socket.emit('lobby-leave') // make sure we aren't already in a lobby
     this.socket.emit('lobby-create')
@@ -88,10 +88,12 @@ export class CullingAPI {
 
     var checkForGameStart = setInterval(function() {
       if(new Date() > new Date(timeout)) {
-        if(numPlayers > 1) {
+        if(players.length > 1) {
           this.socket.emit('lobby-start-match')
+          cb_start(players)
         } else {
-          cb(null, {code: '', players: []})
+          cb(null, {code: ''})
+          cb_start([])
         }
       }
     }, 1000)
@@ -101,10 +103,10 @@ export class CullingAPI {
         lobbyStatus = JSON.parse(lobbyStatus)
       }
       if(!calledBack) {
-        cb(null, {code: lobbyStatus.code, players: lobbyStatus.members})
+        cb(null, {code: lobbyStatus.code})
       }
-      numPlayers = lobbyStatus.members.length
-      if(numPlayers === numPlayersBeforeStart + 1) {
+      players = lobbyStatus.members
+      if(players.length === numPlayersBeforeStart + 1) {
         this.socket.emit('lobby-start-match')
       }
     })
