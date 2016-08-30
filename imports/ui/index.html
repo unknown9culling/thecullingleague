@@ -1,0 +1,125 @@
+<template name='index'>
+  {{> modal}}
+  {{#if currentUser}}
+    {{> currentgame}}
+    {{#each tournaments}}
+      {{> tournament}}
+    {{/each}}
+  {{else}}
+    <div class='content-header'>
+      <h1>High Ranked Competitive <span class='red'>Culling</span></h1>
+      <p>Register for tournaments and rise to the top of the Culling ranks!</p>
+    </div>
+    <div class='box-row'>
+      <div class='box'>
+        <h3>Ranked <span class='red'>Play</span></h3>
+        <p>Don't play anymore with players half your skill level in a game where you can win every time. Challenge yourself and play against players matched exactly to your level of play.</p>
+      </div>
+      <div class='box'>
+        <h3><span class='red'>Automatic</span> Game Setup</h3>
+        <p>Our site will automatically organize a tournament and give you a key to join the match instead of having to manually setup the private game every time.</p>
+      </div>
+    </div>
+    <div class='box-row'>
+      <div class='box'>
+        <h3>Weekly <span class='red'>Tournaments</span></h3>
+        <p>Every week, MANTRACKER.co will host a tournament where you can try to become the best Culling player in the world.</p>
+      </div>
+      <div class='box'>
+        <h3><span class='red'>Stat</span> Tracking</h3>
+        <p>We'll automatically track your win rate and rank on the site which is automatically updated everytime you play a game!</p>
+      </div>
+    </div>
+    <div class='content-footer'>
+      <p>Sign in to play now!</p>
+      <img id='login-button' src='/steam_login.png'/>
+    </div>
+  {{/if}}
+</template>
+
+<template name="tournament">
+  <div class='tournament'>
+    <div class='title-row'>
+      <h3>{{tournamentName}}</h3>
+      {{#if isRegistered}}
+        <button class='leave-tournament'>Leave Tournament</button>
+      {{else}}
+        <button class='join-tournament'>Join Tournament</button>
+      {{/if}}
+    </div>
+    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openForRegistration}}Open For Registration{{else}}Closed to Registration{{/if}}</p>
+    <p>{{tournamentDescription}}</p>
+    <b>Players Registered</b>
+    <ul>
+      {{#each players}}
+      <li><p>{{services.steam.personaname}}</p></li>
+      {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="currentgame">
+  {{#if currentGame}}
+    <div class='game'>
+      <div class='game-header'>
+        <div class='title'>{{currentGame.tournament.tournamentName}} Round #{{currentGame.round}}</div>
+        <div class='join-game'>Join game: {{currentGame.code}}</div>
+        <button class='answer yes modal-button report-player' data-modal-template='report-player-modal'>Report Player!</button>
+        <button class='answer yes modal-button report-score' data-modal-template='report-score-modal'>Report Score!</button>
+      </div>
+      <div class='game-content'>
+        Players
+        <ul>
+          {{#each currentGame.playersWithInfo}}
+            <li>{{services.steam.personaname}}</li>
+          {{/each}}
+        </ul>
+        Join game {{momentUntil currentGame.toJoin}} or less<br/>
+        Last chance to report a winner is {{momentUntil currentGame.gameEnd}}
+      </div>
+    </div>
+  {{/if}}
+</template>
+
+<template name="modal">
+  {{#if activeModal}}
+    <div class='page-cover'></div>
+    <div class="man-modal">
+      {{> Template.dynamic template=activeModal}}
+    </div>
+  {{/if}}
+</template>
+
+<template name="check-report-score-modal">
+  <h3>Would you like to report the winner of your last game?</h3>
+  <div class='answers'>
+    <button class='answer yes modal-button' data-modal-template='report-score-modal'>Yes</button>
+    <button class='answer no modal-button' data-modal-template=''>No</button>
+  </div>
+</template>
+
+<template name="report-player-modal">
+  <div class='report-form'>
+    <label for='player-name'>What was the players name?</label><br/>
+    <select name='player-name' class='player-name'>
+      {{#each currentGame.playersWithInfo}}
+        <option data-id='{{_id}}'>{{services.steam.personaname}}</option>
+      {{/each}}
+    </select><br/><br/>
+    <label for='report-info'>What did this player do? (please describe in detail and provide proof such as logs, screenshots or videos)</label><br/>
+    <input type='textarea' name='report-info' class='report-info'/><br/><br/>
+    <button class='answer no modal-button report-player' data-modal-template=''>Report!</button>
+  </div>
+</template>
+
+<template name="report-score-modal">
+  <div class='score-form'>
+    <h3>Who won the game? (WARNING: answer truthfully or you will be banned) [1 free rank point for reporting]</h3>
+    <div class='answers'>
+      {{#each currentGame.playersWithInfo}}
+        <button class='answer player modal-button report-winner' data-modal-template='' data-id='{{_id}}' data-game-id='{{currentGame._id}}'>{{services.steam.personaname}}</button>
+      {{/each}}
+      <button class='answer no modal-button' data-modal-template=''>I Don't Know or don't want to answer!</button>
+    </div>
+  </div>
+</template>
