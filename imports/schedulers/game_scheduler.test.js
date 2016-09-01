@@ -14,26 +14,6 @@ describe('Game scheduler', function() {
   describe('checkForTournamentStart', function() {
     it('should create a game if a tournament has enough players', function() {
       var player = Meteor.users.insert({})
-      var player2 = Meteor.users.insert({})
-      var tournament = Tournaments.insert({
-        startDate: moment().subtract(2, 'minutes').toDate(),
-        endRegister: moment().subtract(1, 'minutes').toDate(),
-        tournamentName: 'Weekly ManTracker.co Tournament',
-        tournamentDescription: 'Fight to the death in our ManTracker hosted weekly tournament. Every week, players will fight to win by joining the weekly tournament and earning points when they win. Play now!',
-        slots: 64,
-        region: 'north-america',
-        started: false,
-        active: true,
-        players: [player, player2],
-        players_left: [player, player2],
-        round: 1
-      })
-      checkForTournamentStart()
-      var numberOfGames = Games.find({tournamentId: tournament}).count()
-      numberOfGames.should.equal(1)
-    })
-    it('should not create a game if a tournament does not have enough players', function() {
-      var player = Meteor.users.insert({})
       var tournament = Tournaments.insert({
         startDate: moment().subtract(2, 'minutes').toDate(),
         endRegister: moment().subtract(1, 'minutes').toDate(),
@@ -49,7 +29,7 @@ describe('Game scheduler', function() {
       })
       checkForTournamentStart()
       var numberOfGames = Games.find({tournamentId: tournament}).count()
-      numberOfGames.should.equal(0)
+      numberOfGames.should.equal(1)
     })
     it('should create 2 games if a tournament has enough players', function() {
       players = []
@@ -178,7 +158,7 @@ describe('Game scheduler', function() {
       })
       checkForRoundFinish()
       var winner = Tournaments.findOne({_id: tournament}).winner
-      console.log(players)
+      console.log(players)  
       expect(winner).to.equal(players[0])
     })
     it('should not end the tournament if games are still left', function() {

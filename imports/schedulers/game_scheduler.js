@@ -15,22 +15,13 @@ export var gameStart = function(game) {
       } else {
         Games.update({_id: game._id}, {$set: {code: code}})
       }
-    }), game.toJoin, function(players) {
-      tournament = Tournaments.findOne({_id: game.tournamentId})
-      var currentPlayers = game.players
-      currentPlayers.forEach(function(player) {
-        if(players.indexOf(player) === -1) {
-          tournament.players_left.splice(tournament.players_left.indexOf(player), 1)
-        }
-      })
-      Tournaments.update({_id: game.tournamentId}, {$set: {players_left: currentPlayers}})
-    })
+    }), game.toJoin)
     Games.update({_id: game._id}, {$set: {started: true}})
   }
 }
 
 export var tournamentStart = function(tournament) {
-  if(tournament.players_left.length > 1) {
+  if(tournament.players_left.length > 0) {
     gamesToSchedule = getGames(tournament.players_left, 16)
     timeOffset = 0
     gamesToSchedule.forEach((game) => {

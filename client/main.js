@@ -4,7 +4,6 @@ import '../imports/ui/layout.html'
 import '../imports/ui/index.html'
 import '../imports/ui/faq.html'
 import '../imports/ui/about.html'
-import '../imports/ui/leaderboard.html'
 import { Router } from 'meteor/iron:router'
 import { Template } from 'meteor/templating'
 import { Tournaments } from '../imports/api/tournaments.js'
@@ -26,10 +25,6 @@ Router.route('/faq', function () {
 
 Router.route('/about', function () {
   this.render('about')
-})
-
-Router.route('/leaderboard', function () {
-  this.render('leaderboard')
 })
 
 Template.body.onCreated(function() {
@@ -73,15 +68,6 @@ Template.tournament.events({
   },
   'click .join-tournament': function() {
     Meteor.call('tournaments.joinTournament', this._id)
-  }
-})
-
-Template.leaderboard.helpers({
-  leaderboard() {
-    return Meteor.users.find({rank: {$gt: 0}})
-  },
-  add1(x) {
-    return x + 1
   }
 })
 
