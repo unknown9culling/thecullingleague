@@ -35,6 +35,9 @@ Template.body.onCreated(function() {
 Template.header.events({
   'click #login-button': function() {
     Meteor.loginWithSteam()
+  },
+  'click #logout': function() {
+    Meteor.logout()
   }
 })
 
