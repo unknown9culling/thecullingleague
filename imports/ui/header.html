@@ -1,0 +1,18 @@
+<template name="header">
+  <div class="header-container">
+    <div class="logo"><a href='/'><span class='man'>man</span><span class='tracker'>tracker</span>.<span class='faded'>co</span></a></div>
+    <div class="navigation">
+      <ul>
+        <li><a href="/about">About</a></li>
+        <li><a href="/faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="profile">
+      {{#if currentUser}}
+        Logged in as {{currentUser.services.steam.personaname}}<br/>{{#if currentUser.rank}}{{currentUser.rank}}{{else}}0{{/if}} ranking points<br/><a id='logout' href="#">Logout!</a>
+      {{else}}
+      <img id='login-button' src='/steam_login.png'/>
+      {{/if}}
+    </div>
+  </div>
+</template>

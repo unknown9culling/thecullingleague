@@ -1,0 +1,23 @@
+<template name="leaderboard">
+  <h3>Top 10 Leaderboard</h3>
+  <table>
+    <col style='width: 20px'>
+    <col style='width: 70%'>
+    <!-- <col style='width: '> -->
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Ranking Points</th>
+    </tr>
+    <tbody>
+      {{#each leaderboard}}
+        <tr>
+          <td>{{add1 @index}}</td>
+          <td>{{services.steam.personaname}}</td>
+          <td>{{rank}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table><br/>
+  <p>To earn ranking points, compete in tournaments and earn points equal to the number of players you killed when you win, or earn 1 point per game for reporting the correct winner.</p>
+</template>
