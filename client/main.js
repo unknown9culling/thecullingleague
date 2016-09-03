@@ -139,6 +139,12 @@ Template.header.events({
   }
 })
 
+Template.header.helpers({
+  rankingPoints(currentUser) {
+    return currentUser.rank[currentUser.region]
+  }
+})
+
 Template.index.events({
   'click .modal-button': function(event, template) {
     var name = template.$(event.target).data('modal-template')

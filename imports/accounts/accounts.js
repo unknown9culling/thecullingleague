@@ -18,10 +18,3 @@ Meteor.methods({
     Meteor.users.update({_id: this.userId}, {$set: {region: region}})
   }
 })
-
-Meteor.users.helpers({
-  rankingPoints() {
-    regionVar = 'rank.' + (this.region || 'north-america')
-    return regionVar
-  }
-})

@@ -103,11 +103,7 @@
     <label for='player-name'>What was the players name?</label><br/>
     <select name='player-name' class='player-name'>
       {{#each currentGame.playersWithInfo}}
-<<<<<<< HEAD
         <option data-id='{{_id}}'>{{profile.personaname}}</option>
-=======
-        <option data-id='{{_id}}'>{{services.steam.personaname}}</option>
->>>>>>> 0be9cbe3dd3c2d0401843ddf4d0d7d95e7f9eecc
       {{/each}}
     </select><br/><br/>
     <label for='report-info'>What did this player do? (please describe in detail and provide proof such as logs, screenshots or videos)</label><br/>
@@ -121,11 +117,7 @@
     <h3>Who won the game? (WARNING: answer truthfully or you will be banned) [1 free rank point for reporting]</h3>
     <div class='answers'>
       {{#each currentGame.playersWithInfo}}
-<<<<<<< HEAD
         <button class='answer player modal-button report-winner' data-modal-template='' data-id='{{_id}}' data-game-id='{{currentGame._id}}'>{{profile.personaname}}</button>
-=======
-        <button class='answer player modal-button report-winner' data-modal-template='' data-id='{{_id}}' data-game-id='{{currentGame._id}}'>{{services.steam.personaname}}</button>
->>>>>>> 0be9cbe3dd3c2d0401843ddf4d0d7d95e7f9eecc
       {{/each}}
       <button class='answer no modal-button' data-modal-template=''>I Don't Know or don't want to answer!</button>
     </div>

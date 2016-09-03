@@ -11,7 +11,7 @@
     </div>
     <div class="profile">
       {{#if currentUser}}
-        Logged in as {{currentUser.profile.personaname}}<br/>{{#if currentUser.rank}}{{currentUser.rank}}{{else}}0{{/if}} ranking points<br/><a id='logout' href="#">Logout!</a>
+        Logged in as {{currentUser.profile.personaname}}<br/>{{#if rankingPoints currentUser}}{{rankingPoints currentUser}}{{else}}0{{/if}} ranking points<br/><a id='logout' href="#">Logout!</a>
       {{else}}
       <img id='login-button' src='/steam_login.png'/>
       {{/if}}
