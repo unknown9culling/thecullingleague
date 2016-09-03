@@ -83,7 +83,9 @@ export var checkForRoundFinish = function() {
       if(tournament.players_left.length === 1) {
         tournament.winner = tournament.players_left[0]
         if(tournament.players_left[0] !== null) {
-          Meteor.users.update({_id: tournament.players_left[0]}, {$inc: {rank: tournament.players.length}})
+          region = Meteor.users.findOne({_id: tournament.players_left[0]}).region || 'north-america'
+          rankVar = 'rank.' + region
+          Meteor.users.update({'_id': tournament.players_left[0]}, {$inc: {rankVar: tournament.players.length}})
         }
         Tournaments.update({_id: tournament._id}, {$set: {winner: tournament.players_left[0], active: false}})
       } else {

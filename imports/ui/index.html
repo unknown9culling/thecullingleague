@@ -47,7 +47,7 @@
         <button class='join-tournament'>Join Tournament</button>
       {{/if}}
     </div>
-    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openForRegistration}}Open For Registration{{else}}Closed to Registration{{/if}}</p>
+    <p>{{formatDate startDate}} - {{#if started}}Started{{else}}Not Started{{/if}} - {{#if openForRegistration}}Open For Registration{{else}}Closed to Registration{{/if}} - {{region}}</p>
     <p>{{tournamentDescription}}</p>
     <b>Players Registered</b>
     <ul>
@@ -128,6 +128,17 @@
 >>>>>>> 0be9cbe3dd3c2d0401843ddf4d0d7d95e7f9eecc
       {{/each}}
       <button class='answer no modal-button' data-modal-template=''>I Don't Know or don't want to answer!</button>
+    </div>
+  </div>
+</template>
+
+<template name="region-modal">
+  <div class='score-form'>
+    <h3>Select your region:</h3>
+    <div class='answers'>
+      <button class='answer player modal-button set-region' data-modal-template='' data-region='europe'>Europe</button>
+      <button class='answer player modal-button set-region' data-modal-template='' data-region='north-america'>North America</button>
+      <button class='answer player modal-button set-region' data-modal-template='' data-region='oceania'>Oceania</button>
     </div>
   </div>
 </template>

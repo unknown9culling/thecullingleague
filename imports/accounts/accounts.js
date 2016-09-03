@@ -11,3 +11,17 @@ Accounts.onCreateUser(function(options, user) {
 Meteor.publish(null, function() {
   return Meteor.users.find({})
 })
+
+Meteor.methods({
+  'users.setRegion'(region) {
+    check(region, String)
+    Meteor.users.update({_id: this.userId}, {$set: {region: region}})
+  }
+})
+
+Meteor.users.helpers({
+  rankingPoints() {
+    regionVar = 'rank.' + (this.region || 'north-america')
+    return regionVar
+  }
+})

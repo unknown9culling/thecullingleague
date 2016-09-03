@@ -54,13 +54,15 @@ Template.index.events({
 
 Template.index.helpers({
   tournaments() {
-    return Tournaments.find({active: true})
+    region = Meteor.user().region || 'north-america'
+    return Tournaments.find({active: true, region: region})
   }
 })
 
 Template.leaderboard.helpers({
   leaderboard() {
-    return Meteor.users.find({rank: {$gt: 0}})
+    rankVar = 'rank.' + Meteor.user().region || 'north-america'
+    return Meteor.users.find({rankVar: {$gt: 0}})
   },
   add1(x) {
     return x + 1
@@ -76,6 +78,17 @@ Template.tournament.helpers({
   },
   isRegistered() {
     return this.players.indexOf(Meteor.userId()) !== -1
+  },
+  region() {
+    if(this.region === 'north-america') {
+      return 'North America'
+    } else if(this.region === 'europe') {
+      return 'Europe'
+    } else if(this.region === 'oceania') {
+      return 'Oceania'
+    } else {
+      return 'Other'
+    }
   }
 })
 
@@ -119,6 +132,13 @@ Template['report-player-modal'].helpers({
   }
 })
 
+Template.header.events({
+  'click .modal-button': function(event, template) {
+    var name = template.$(event.target).data('modal-template')
+    Session.set('activeModal', name)
+  }
+})
+
 Template.index.events({
   'click .modal-button': function(event, template) {
     var name = template.$(event.target).data('modal-template')
@@ -131,6 +151,9 @@ Template.index.events({
     playerId = template.$(event.target).data('id')
     gameId = template.$(event.target).data('game-id')
     Meteor.call('votes.voteForWinner', gameId, playerId)
+  },
+  'click .set-region': function(event, template) {
+    Meteor.call('users.setRegion', template.$(event.target).data('region'))
   }
 })
 

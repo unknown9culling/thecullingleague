@@ -10,34 +10,38 @@ Meteor.methods({
     check(gameId, String)
     check(winner, String)
 
-    var gameToVoteFor = Games.findOne({_id: gameId})
+    // var gameToVoteFor = Games.findOne({_id: gameId})
+    //
+    // if(!gameToVoteFor) {
+    //   throw new Meteor.Error('not-found')
+    // }
+    //
+    // if(gameToVoteFor.players.indexOf(winner) === -1) {
+    //   throw new Meteor.Error('player-not-found')
+    // }
+    //
+    // if(!gameToVoteFor.active) {
+    //   throw new Meteor.Error('cannot-vote-on-inactive-game')
+    // }
+    //
+    // otherVotesByPlayerCount = Votes.find({
+    //   gameId: gameId,
+    //   player: winner
+    // }).count()
+    //
+    // if(otherVotesByPlayerCount > 0) {
+    //   throw new Meteor.Error('cant-vote-twice')
+    // }
+    //
+    // Votes.insert({
+    //   gameId: gameId,
+    //   player: winner
+    // })
 
-    if(!gameToVoteFor) {
-      throw new Meteor.Error('not-found')
-    }
-
-    if(gameToVoteFor.players.indexOf(winner) === -1) {
-      throw new Meteor.Error('player-not-found')
-    }
-
-    if(!gameToVoteFor.active) {
-      throw new Meteor.Error('cannot-vote-on-inactive-game')
-    }
-
-    otherVotesByPlayerCount = Votes.find({
-      gameId: gameId,
-      player: winner
-    }).count()
-
-    if(otherVotesByPlayerCount > 0) {
-      throw new Meteor.Error('cant-vote-twice')
-    }
-
-    Votes.insert({
-      gameId: gameId,
-      player: winner
-    })
-
-    Meteor.users.update({'_id': this.userId}, {$inc: {rank: 1}})
+    region = Meteor.users.findOne({_id: this.userId}).region || 'north-america'
+    rankVar = 'rank.' + region
+    increment = {}
+    increment[rankVar] = 1
+    Meteor.users.update({'_id': this.userId}, {$inc: increment})
   }
 })
