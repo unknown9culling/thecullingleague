@@ -11,6 +11,7 @@ import { Tournaments } from '../imports/api/tournaments.js'
 import { Games } from '../imports/api/games.js'
 import { Meteor } from 'meteor/meteor'
 import { Session } from 'meteor/session'
+import { jstz } from './lib/jstz.min'
 
 Router.configure({
   layoutTemplate: 'layout'
@@ -75,7 +76,9 @@ Template.leaderboard.helpers({
 
 Template.tournament.helpers({
   formatDate(date) {
-    return moment(date).format('MMMM Do YYYY, h:mm a') + ' PST (UTC+7)'
+    let format = 'MMMM Do, YYYY h:mm a z'
+    let timezone = jstz.determine().name()
+    return timezone ? moment(date).tz(timezone).format(format) : time.format(format)
   },
   players() {
     return this.playersWithInfo()

@@ -34,3 +34,4 @@ practicalmeteor:mocha
 practicalmeteor:chai
 hwillson:stub-collections
 mizzao:timesync
+aldeed:moment-timezone
