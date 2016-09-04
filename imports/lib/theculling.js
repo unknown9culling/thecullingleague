@@ -46,14 +46,14 @@ export class CullingAPI {
       }
       this.socket = socketClient.connect(API_SERVER)
 
-      this.socket.on('connect', () => {
+      this.socket.on('connect', Meteor.bindEnvironment(() => {
         winston.log('info', 'Connected to matchmaking server.')
         this.socket.emit('login', status.sessionID)
-      })
-      this.socket.on('auth-response', (status) => {
+      }))
+      this.socket.on('auth-response', Meteor.bindEnvironment((status) => {
         winston.log('info', 'Login status: ' + status)
         resolve(this.socket)
-      })
+      }))
     })
   }
   login() {
@@ -69,9 +69,6 @@ export class CullingAPI {
           rank: 551
         },
         jar: jar
-      }).then((res) => {
-        console.log(res)
-        return res
       })
     }).then(this.loginSockets).then((socket) => {
       self.socket = socket
@@ -83,40 +80,48 @@ export class CullingAPI {
     var calledBack = false
 
     numPlayers = 0
+    var matchStarted = false
 
     this.socket.emit('lobby-leave') // make sure we aren't already in a lobby
     this.socket.emit('lobby-create')
-    this.socket.on('match-ready', (match) => {
-      this.socket.emit('lobby-leave')
-      this.busy = false
-    })
+    winston.info('Creating lobby... ' + timeout + 'numplayers: ' + numPlayersBeforeStart)
+    this.socket.on('match-ready', Meteor.bindEnvironment((match) => {
+      Meteor.setTimeout(function() {
+        this.socket.emit('lobby-leave')
+        this.busy = false
+        winston.info('Leaving lobby...')
+      }, 1000)
+    }))
 
-    setTimeout(() => {
-      this.busy = false
-    }, 10000)
-
-    var checkForGameStart = setInterval(function() {
+    var checkForGameStart = Meteor.setInterval(() => {
       if(new Date() > new Date(timeout)) {
-        if(numPlayers > 1) {
-          this.socket.emit('lobby-start-match')
-        } else {
-          cb(null, {code: '', players: []})
+        if(matchStarted === false) {
+          if(numPlayers > 1) {
+            this.socket.emit('lobby-start-match')
+            matchStarted = true
+            winston.info('Starting match...')
+          } else {
+            cb(null, {code: '', players: []})
+          }
         }
       }
     }, 1000)
 
-    this.socket.on('lobby-update', (lobbyStatus) => {
+    this.socket.on('lobby-update', Meteor.bindEnvironment((lobbyStatus) => {
       if(typeof(lobbyStatus) === 'string') {
         lobbyStatus = JSON.parse(lobbyStatus)
       }
+      winston.info(lobbyStatus)
       if(!calledBack) {
         cb(null, {code: lobbyStatus.code, players: lobbyStatus.members})
       }
       numPlayers = lobbyStatus.members.length
-      if(numPlayers === numPlayersBeforeStart + 1) {
+      if(numPlayers === numPlayersBeforeStart + 1 && matchStarted === false) {
         this.socket.emit('lobby-start-match')
+        matchStarted = true
+        winston.info('Starting match...')
       }
-    })
+    }))
   }
 }
 

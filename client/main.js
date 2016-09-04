@@ -67,7 +67,9 @@ Template.index.helpers({
 Template.leaderboard.helpers({
   leaderboard() {
     rankVar = 'rank.' + Meteor.user().region || 'north-america'
-    return Meteor.users.find({rankVar: {$gt: 0}})
+    toFind = {}
+    toFind[rankVar] = {$gt: 0}
+    return Meteor.users.find(toFind)
   },
   add1(x) {
     return x + 1

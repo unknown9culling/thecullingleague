@@ -33,10 +33,11 @@ export var tournamentStart = function(tournament) {
         status: 'Active',
         active: true,
         eliminated: false,
+        start: moment().add(timeOffset, 'minutes').toDate(),
         toJoin: moment().add(5, 'minutes').add(timeOffset, 'minutes').toDate(),
         gameEnd: moment().add(30, 'minutes').add(timeOffset, 'minutes').toDate()
       })
-      timeOffset += 5.2 // leave about 5 minutes between starting games
+      timeOffset += 6 // leave about 5 minutes between starting games
     })
     Tournaments.update({_id: tournament._id}, {$set: {started: true}})
   } else {
@@ -57,7 +58,9 @@ export var checkForGameStart = function() {
   var activeGames = Games.find({started: false})
 
   activeGames.forEach(function(game) {
-    gameStart(game)
+    if(new Date() > new Date(game.start)) {
+      gameStart(game)
+    }
   })
 }
 
