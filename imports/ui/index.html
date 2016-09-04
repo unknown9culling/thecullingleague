@@ -1,6 +1,7 @@
 <template name='index'>
   {{> modal}}
   {{#if currentUser}}
+    <p>Games will show up here when they are scheduled. Be here at least 5 minutes before the tournament starts.</p>
     {{> currentgame}}
     {{#each tournaments}}
       {{> tournament}}
@@ -68,7 +69,8 @@
         <button class='answer yes modal-button report-score' data-modal-template='report-score-modal'>Report Score!</button>
       </div>
       <div class='game-content'>
-        Players
+        Players<br/>
+        Remember to report the winner of your game by clicking the button above for 1 free ranking point.
         <ul>
           {{#each currentGame.playersWithInfo}}
             <li>{{profile.personaname}}</li>

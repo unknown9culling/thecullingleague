@@ -73,6 +73,10 @@ Template.leaderboard.helpers({
   },
   add1(x) {
     return x + 1
+  },
+  getRank(user) {
+    region = user.region
+    return user.rank[region]
   }
 })
 
@@ -126,9 +130,7 @@ Template.currentgame.helpers({
 Template['report-score-modal'].helpers({
   currentGame() {
     return Games.findOne({
-      players: {
-        $in: [Meteor.userId()]
-      }
+      active: true
     })
   }
 })
@@ -136,9 +138,7 @@ Template['report-score-modal'].helpers({
 Template['report-player-modal'].helpers({
   currentGame() {
     return Games.findOne({
-      players: {
-        $in: [Meteor.userId()]
-      }
+      active: true
     })
   }
 })
