@@ -22,7 +22,7 @@ export var gameStart = function(game) {
 
 export var tournamentStart = function(tournament) {
   if(tournament.players_left.length > 0) {
-    gamesToSchedule = getGames(tournament.players_left, 16)
+    gamesToSchedule = getGames(tournament.players_left, 15)
     timeOffset = 0
     gamesToSchedule.forEach((game) => {
       var gameId = Games.insert({
@@ -83,15 +83,18 @@ export var checkForRoundFinish = function() {
       if(tournament.players_left.length === 1) {
         tournament.winner = tournament.players_left[0]
         if(tournament.players_left[0] !== null) {
-          region = Meteor.users.findOne({_id: tournament.players_left[0]}).region || 'north-america'
-          rankVar = 'rank.' + region
+          rankVar = 'rank.' + tournament.region
           increment = {}
           increment[rankVar] = 1
           Meteor.users.update({'_id': tournament.players_left[0]}, {$inc: increment})
         }
         Tournaments.update({_id: tournament._id}, {$set: {winner: tournament.players_left[0], active: false}})
+      } else if(tournament.players_left.length === 0) {
+        Tournaments.update({_id: tournament._id}, {$set: {active: false}})
       } else {
         Tournaments.update({_id: tournament._id}, {$inc: {round: 1}})
+        tournamentToScheduleGames = Tournaments.findOne({_id: tournament._id})
+        tournamentStart(tournamentToScheduleGames)
       }
     }
   })

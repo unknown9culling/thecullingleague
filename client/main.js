@@ -54,8 +54,12 @@ Template.index.events({
 
 Template.index.helpers({
   tournaments() {
-    region = Meteor.user().region || 'north-america'
-    return Tournaments.find({active: true, region: region})
+    region = Meteor.user().region
+    if(region) {
+      return Tournaments.find({active: true, region: region})
+    } else {
+      return Tournaments.find({active: true})
+    }
   }
 })
 
@@ -71,7 +75,7 @@ Template.leaderboard.helpers({
 
 Template.tournament.helpers({
   formatDate(date) {
-    return moment(date).format('MMMM Do YYYY, h:mm a')
+    return moment(date).format('MMMM Do YYYY, h:mm a') + ' PST (UTC+7)'
   },
   players() {
     return this.playersWithInfo()
@@ -86,6 +90,8 @@ Template.tournament.helpers({
       return 'Europe'
     } else if(this.region === 'oceania') {
       return 'Oceania'
+    } else if(this.region === '') {
+      return 'All Regions'
     } else {
       return 'Other'
     }
@@ -141,7 +147,7 @@ Template.header.events({
 
 Template.header.helpers({
   rankingPoints(currentUser) {
-    return currentUser.rank[currentUser.region]
+    return currentUser.rank[currentUser.region || 'north-america']
   }
 })
 

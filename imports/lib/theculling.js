@@ -4,17 +4,22 @@ var rp = require('request-promise')
 var socketClient = require('socket.io-client')
 var jar = rp.jar()
 var greenworks
-greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
+
+if(process.env.authTicket === undefined) {
+  greenworks = fork(process.env.PWD +  __dirname + '/greenworks_communicator.js')
+}
 
 function getAuthSessionTicket() {
   return new Promise(function(resolve, reject) {
-    greenworks.send('getAuthSessionTicket')
-    greenworks.on('message', function(ticket) {
-      resolve(ticket.ticket)
-    })
-    setTimeout(function() {
+    if(process.env.authTicket) {
+      winston.info('Using env variable to authenticate with steam...')
       resolve(process.env.authTicket)
-    }, 5000)
+    } else {
+      greenworks.send('getAuthSessionTicket')
+      greenworks.on('message', function(ticket) {
+        resolve(ticket.ticket)
+      })
+    }
   })
 }
 
@@ -24,8 +29,9 @@ export class CullingAPI {
   constructor(api_server) {
     this.busy = true
     winston.log('info', 'Initializing Steamworks API...')
-
-    greenworks.send('initAPI')
+    if(process.env.authTicket === undefined) {
+      greenworks.send('initAPI')
+    }
   }
   getStatus() {
     return rp({
@@ -63,6 +69,9 @@ export class CullingAPI {
           rank: 551
         },
         jar: jar
+      }).then((res) => {
+        console.log(res)
+        return res
       })
     }).then(this.loginSockets).then((socket) => {
       self.socket = socket
