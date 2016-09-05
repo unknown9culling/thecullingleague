@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ServiceConfiguration } from 'meteor/service-configuration'
-import { TheCullingUS } from '../imports/lib/theculling'
+import { TheCullingUS, TheCullingEU, TheCullingOCN } from '../imports/lib/theculling'
 
 import '../imports/api/games'
 import '../imports/api/tournaments'
@@ -14,19 +14,22 @@ SyncedCron.config({
 
 import '../imports/schedulers/tournament_scheduler'
 import '../imports/schedulers/game_scheduler'
+Meteor.setTimeout(() => {
+  TheCullingUS.login()
+  TheCullingEU.login()
+  TheCullingOCN.login()
 
-TheCullingUS.login()
+  SyncedCron.start()
 
-SyncedCron.start()
-
-Meteor.startup(function () {
-  ServiceConfiguration.configurations.upsert(
-    { service: 'steam' },
-    {
-      $set: {
-        loginStyle: 'redirect',
-        timeout: 10000 // 10 seconds
+  Meteor.startup(function () {
+    ServiceConfiguration.configurations.upsert(
+      { service: 'steam' },
+      {
+        $set: {
+          loginStyle: 'redirect',
+          timeout: 10000 // 10 seconds
+        }
       }
-    }
-  )
-})
+    )
+  })
+}, 5000)

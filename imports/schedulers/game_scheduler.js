@@ -2,12 +2,20 @@ import { Games } from '../api/games'
 import { Tournaments } from '../api/tournaments'
 
 import { getGames } from '../util/get_games'
-import { TheCullingUS } from '../lib/theculling'
+import { TheCullingUS, TheCullingEU, TheCullingOCN } from '../lib/theculling'
 import moment from 'moment'
 
 export var gameStart = function(game) {
-  if(TheCullingUS.busy === false) {
-    TheCullingUS.launchGame(game.players.length, Meteor.bindEnvironment(function(err, data) {
+  var cullingAPI
+  if(game.region === 'north-america') {
+    cullingAPI = TheCullingUS
+  } else if(game.region === 'europe') {
+    cullingAPI = TheCullingEU
+  } else if(game.region === 'oceania') {
+    cullingAPI = TheCullingOCN
+  }
+  if(cullingAPI.busy === false) {
+    cullingAPI.launchGame(game.players.length, Meteor.bindEnvironment(function(err, data) {
       code = data.code
       members = data.players
       if(err) {
@@ -33,6 +41,7 @@ export var tournamentStart = function(tournament) {
         status: 'Active',
         active: true,
         eliminated: false,
+        region: tournament.region,
         start: moment().add(timeOffset, 'minutes').toDate(),
         toJoin: moment().add(5, 'minutes').add(timeOffset, 'minutes').toDate(),
         gameEnd: moment().add(30, 'minutes').add(timeOffset, 'minutes').toDate()
