@@ -16,8 +16,8 @@ import '../imports/schedulers/tournament_scheduler'
 import '../imports/schedulers/game_scheduler'
 Meteor.setTimeout(() => {
   TheCullingUS.login()
-  TheCullingEU.login()
-  TheCullingOCN.login()
+  Meteor.setTimeout(() => {TheCullingEU.login()}, 2000)
+  Meteor.setTimeout(() => {TheCullingOCN.login()}, 4000)
 
   SyncedCron.start()
 

@@ -43,25 +43,25 @@ export class CullingAPI {
         rank: 551
       },
       jar: jar
-    }).then(Meteor.bindEnvironment(function(status) {
-      return new Promise(Meteor.bindEnvironment((resolve, reject) => {
+    }).then(function(status) {
+      return new Promise((resolve, reject) => {
         if(typeof(status) === 'string') {
           status = JSON.parse(status)
         }
         this.socket = socketClient.connect(self.apiServer)
 
-        this.socket.on('connect', Meteor.bindEnvironment(() => {
+        this.socket.on('connect', () => {
           winston.log('info', self.apiServer + ': Connected to matchmaking server.')
           this.socket.emit('login', status.sessionID)
-        }))
-        this.socket.on('auth-response', Meteor.bindEnvironment((status) => {
+        })
+        this.socket.on('auth-response', (status) => {
           winston.log('info', self.apiServer + ': Login status: ' + status)
           resolve(this.socket)
-        }))
-      }))
-    })).then((socket) => {
+        })
+      })
+    }).then((socket) => {
       self.socket = socket
-      this.busy = false
+      self.busy = false
     })
   }
   launchGame(numPlayersBeforeStart, cb, timeout) {
